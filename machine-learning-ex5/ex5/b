@@ -1,0 +1,1 @@
+J = (1 / (2*m)) * (sum((X * theta - y) .^ 2) + lambda * theta0' * theta0);
