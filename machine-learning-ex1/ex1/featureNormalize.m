@@ -32,7 +32,7 @@ sigma = zeros(1, size(X, 2));
 
 % ============================================================
 
-% get the columns size
+% get the columns size, size(X): will return all dimentions so 2 is for col
 cols = size(X,2);
 
 for i=1:cols
