@@ -10,9 +10,7 @@ g = zeros(size(z));
 %               vector or scalar).
 
 
-% the '.' is for matrix and vector 
-
-g = 1 ./ (1 + e.^-z);
+g = 1 ./ ( 1 + e.^(-z));
 
 
 % =============================================================

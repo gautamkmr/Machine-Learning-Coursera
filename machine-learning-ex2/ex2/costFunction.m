@@ -9,20 +9,12 @@ m = length(y); % number of training examples
 
 % You need to return the following variables correctly 
 J = 0;
-grad = zeros(size(theta));
-
-% hypothesis h_theta(x)
-
 h = sigmoid(X*theta);
 
-% cost function
-%J = (1/m)*sum(-ylog(h) - (1-y)log(1-h));
-% matrix multiplication with transpose will result into sum :)
 J = (1/m)*(-y'*log(h) - (1-y)'*log(1-h));
 
-% grad = (1/m) * sum((h - y)*x)
-
-grad = (1/m)*X'*(h-y);
+grad = zeros(size(theta));
+grad = (1/m)*X'*(h - y);
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta.
