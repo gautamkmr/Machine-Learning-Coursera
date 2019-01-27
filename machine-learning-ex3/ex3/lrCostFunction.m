@@ -9,15 +9,20 @@ function [J, grad] = lrCostFunction(theta, X, y, lambda)
 m = length(y); % number of training examples
 
 % You need to return the following variables correctly 
-% J = (1/m)*sum(-ylog(h) - (1-y)log(1-h)) + lambda/2m(theta^2);
+J = 0;
+grad = zeros(size(theta));
 
-%h = sigmoid(X * theta)
-%theta_reg = [0 ; theta(2:size(theta), :)];
-%reg_term = lambda*(theta_reg'*theta_reg)/(2*m);
-%J = ((-y)'*log(h) - (1-y)'*log(1-h))/m + reg_term;
-%
-%% grad = (1/m) * sum((h - y)*x) + (lambda/m)*theta
-%grad = (X'*(h - y)+lambda*theta_reg)/m; 
+h =  sigmoid(X*theta);
+
+%Note that you should not be regularizing θ0 which is used for the bias term.
+updated_theta = [0 ; theta(2:end, :)];
+regularized_cost = lambda *(updated_theta'*updated_theta)/(2*m);
+
+J = ((-y)'*log(h) - (1-y)'*log(1-h))/m + regularized_cost;
+
+
+grad = (X'*(h-y) + lambda*updated_theta)/m;
+
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta.
 %               You should set J to the cost.
@@ -44,16 +49,7 @@ m = length(y); % number of training examples
 
 
 
-% calculate cost function
-h = sigmoid(X*theta);
-% calculate penalty
-% excluded the first theta value
-theta1 = [0 ; theta(2:end, :)];
-p = lambda*(theta1'*theta1)/(2*m);
-J = ((-y)'*log(h) - (1-y)'*log(1-h))/m + p;
 
-% calculate grads
-grad = (X'*(h - y)+lambda*theta1)/m;
 
 
 
@@ -62,5 +58,6 @@ grad = (X'*(h - y)+lambda*theta1)/m;
 
 % =============================================================
 
+grad = grad(:);
 
 end

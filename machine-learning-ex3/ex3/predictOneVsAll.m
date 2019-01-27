@@ -31,12 +31,12 @@ X = [ones(m, 1) X];
 %       
 
 
-predictions = sigmoid(X*all_theta')
-
-[max_val, max_val_index] = max(predictions, [], 2)
-p=max_val_index
 
 
+predictions = sigmoid(X*all_theta');
+
+[max_val, max_val_index] = max(predictions, [], 2);
+p=max_val_index;
 
 
 
