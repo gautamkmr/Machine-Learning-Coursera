@@ -16,6 +16,8 @@ function [J grad] = nnCostFunction(nn_params, ...
 
 % Reshape nn_params back into the parameters Theta1 and Theta2, the weight matrices
 % for our 2 layer neural network
+% Theta1 has size 25 x 401
+% Theta2 has size 10 x 26
 Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
                  hidden_layer_size, (input_layer_size + 1));
 
@@ -62,15 +64,23 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
-X = [ones(m,1) X];
+% shape of X would be now m*(#features) i.e. 5000*401
+% x has shape 5000*401
+X = [ones(m, 1), X];
+a1 = X;
 
+% Theta1 has size 25 x 401
 
-% foward propagation
-% a1 = X; 
-a2 = sigmoid(Theta1 * X');
+Z2 = Theta1*a1';
+a2 = sigmoid(Z2);
+
+% Theta2 has size 10 x 26
+% a2 has size 25*5000
+% so we need to add bias to a2
 a2 = [ones(m,1) a2'];
-
-h_theta = sigmoid(Theta2 * a2'); % h_theta equals z3
+Z3 = Theta2*a2';
+a3 = sigmoid(Z3);
+h_theta=a3;
 
 % y(k) - the great trick - we need to recode the labels as vectors containing only values 0 or 1 (page 5 of ex4.pdf)
 yk = zeros(num_labels, m); 
@@ -78,15 +88,14 @@ for i=1:m,
   yk(y(i),i)=1;
 end
 
-% follow the form
-J = (1/m) * sum ( sum (  (-yk) .* log(h_theta)  -  (1-yk) .* log(1-h_theta) ));
-
+J = (1/m)* sum(sum ((-yk).*log(h_theta) - (1-yk).*log(1-h_theta))); 
 
 
 % Note that you should not be regularizing the terms that correspond to the bias. 
 % For the matrices Theta1 and Theta2, this corresponds to the first column of each matrix.
 t1 = Theta1(:,2:size(Theta1,2));
 t2 = Theta2(:,2:size(Theta2,2));
+
 
 % regularization formula
 Reg = lambda  * (sum( sum ( t1.^ 2 )) + sum( sum ( t2.^ 2 ))) / (2*m);
@@ -126,7 +135,7 @@ for t=1:m,
 	delta_2 = delta_2(2:end); 
 
 	Theta2_grad = Theta2_grad + delta_3 * a2';
-	Theta1_grad = Theta1_grad + delta_2 * a1; % I don't know why a1 doesn't need to be transpost (brute force try)
+	Theta1_grad = Theta1_grad + delta_2 * a1; % a1 doesn't need to be transpost
 
 end;
 
@@ -155,5 +164,28 @@ end;
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 
-end
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% -------------------------------------------------------------
+
+% =========================================================================
+
+% Unroll gradients
+grad = [Theta1_grad(:) ; Theta2_grad(:)];
+
+
+end
